@@ -6,13 +6,15 @@
 # Chặn quảng cáo từ RevenueCat (nếu có)
 DOMAIN, ads.revenuecat.com, REJECT
 DOMAIN, adserver.revenuecat.com, REJECT
+DOMAIN, analytics.revenuecat.com, REJECT
+DOMAIN, track.revenuecat.com, REJECT
 
 [Script]
 # Fake response từ RevenueCat API – làm cho giống thật hơn
-revenuecat = type=http-response, pattern=^https:\/\/api\.revenuecat\.com\/v1\/subscribers\/[^/]+$, script-path=https://raw.githubusercontent.com/truongvu201005/locket-module/refs/heads/main/locket_gold_fake_response.js, requires-body=true, timeout=60
+revenuecat = type=http-response, pattern=^https:\/\/api\.revenuecat\.com\/v1\/subscribers\/[^/]+$, script-path=https://raw.githubusercontent.com/truongvu201005/locket-module/refs/heads/main/locket_gold_fake_response.js, requires-body=true, timeout=30, max-size=1024
 
 # Xóa Authorization header để tránh bị check token
-remove_auth = type=http-request, pattern=^https:\/\/api\.revenuecat\.com\/v1\/(receipts|subscribers), script-path=https://raw.githubusercontent.com/truongvu201005/locket-module/refs/heads/main/remove_auth_header.js, timeout=60
+remove_auth = type=http-request, pattern=^https:\/\/api\.revenuecat\.com\/v1\/(receipts|subscribers), script-path=https://raw.githubusercontent.com/truongvu201005/locket-module/refs/heads/main/remove_auth_header.js, timeout=30
 
 [MITM]
 hostname = %APPEND% api.revenuecat.com
