@@ -1,0 +1,25 @@
+#!name=My Locket Gold Unlock
+#!desc=Module to unlock Locket Gold features
+#!author=YourName
+
+[Rule]
+# Chặn quảng cáo (thay đổi domain nếu cần)
+DOMAIN, ads.locketapp.com, REJECT
+DOMAIN, adserver.locketapp.com, REJECT
+
+# Định tuyến API qua script
+DOMAIN, api.locketapp.com, SCRIPT, unlock-gold
+
+[Script]
+# Script nhúng trực tiếp để giả lập tư cách Gold
+unlock-gold http-response api.locketapp.com script-content=
+let body = $response.body;
+let obj = JSON.parse(body);
+obj.premium = true;
+obj.subscription = "active";
+obj.expiry = "2099-12-31";
+$done({ body: JSON.stringify(obj) }), requires-body=true, timeout=10
+
+[MITM]
+# Bật MITM để can thiệp HTTPS
+hostname = api.locketapp.com
